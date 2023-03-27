@@ -130,4 +130,5 @@ dmypy.json
 .pyre/
 
 # dataset
-data_process/Archive-ROCStories/
+data_process/Archive-ROCStories
+data_process/*.csv
