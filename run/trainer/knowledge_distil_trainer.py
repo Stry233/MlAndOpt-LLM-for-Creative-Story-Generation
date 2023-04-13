@@ -1,4 +1,4 @@
-import torch
+  import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from transformers import (
@@ -70,7 +70,7 @@ def compute_loss(model, batch, alpha_ce=0.5, alpha_mlm=0.5, alpha_cos=0.0, tempe
 
 
 training_args = TrainingArguments(
-    output_dir="./distilled_model",
+    output_dir="./model",
     overwrite_output_dir=True,
     num_train_epochs=3,
     per_device_train_batch_size=8,
