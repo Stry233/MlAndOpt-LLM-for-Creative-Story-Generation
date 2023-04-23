@@ -16,7 +16,7 @@ student_model_name = "t5-base"
 tokenizer = AutoTokenizer.from_pretrained(teacher_model_name)
 
 # Step 2: Tokenize and batch your input text data
-train_file = "" # todo
+train_file = ""
 train_dataset = TextDataset(tokenizer=tokenizer, file_path=train_file, block_size=128)
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
