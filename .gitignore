@@ -115,6 +115,9 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# idea setting
+.idea
+
 # Rope project settings
 .ropeproject
 
@@ -131,4 +134,5 @@ dmypy.json
 
 # dataset
 data_process/Archive-ROCStories
-data_process/*.csv
+./data_process/Archive-ROCStories/analyze/ns_formated_opt.csv
+./data_process/ROC_clean.csv

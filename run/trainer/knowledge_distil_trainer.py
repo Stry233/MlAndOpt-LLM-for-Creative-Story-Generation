@@ -1,4 +1,4 @@
-  import torch
+import torch
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from transformers import (
