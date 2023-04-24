@@ -56,7 +56,7 @@
 \lstset{style=mystyle}
 
 % Optional math commands from https://github.com/goodfeli/dlbook_notation.
-\input{math_commands.tex}
+%\input{math_commands.tex}
 
 \usepackage{hyperref}
 \usepackage{url}
@@ -74,7 +74,7 @@ CSCI 4968 - 01 - Spring 2023\\
 Department of Computer Science\\
 Rensselaer Polytechnic Institute\\
 Troy, NY 12180, USA \\
-\texttt{\{cheny63, caiy3, capuzb\}@rpi.edu} \\
+\texttt{\{cheny63, capuzb\}@rpi.edu} \\
 % \And
 % Ji Q. Ren \& Yevgeny LeNet \\
 % Department of Computational Neuroscience \\
@@ -106,7 +106,7 @@ Troy, NY 12180, USA \\
 \maketitle
 
 \begin{abstract}
-Creative story generation is a challenging and intriguing task in the field of natural language processing. With the advent of Large Language Models (LLMs), there is growing interest in utilizing their impressive text generation capabilities for generating coherent and engaging stories. In this paper, we investigate the potential of Large Language Models (LLMs) for creative story generation, aiming to develop a framework that generates coherent and engaging stories characterized by rich narrative structures. Our methodology combines LLM fine-tuning with knowledge distillation techniques, utilizing both teacher and student models to create a computationally efficient framework capable of producing captivating stories without compromising text quality. We provide an in-depth overview of our methodology, detailing the implementation of knowledge distillation and its associated loss functions. Our experiments demonstrate the effectiveness of our proposed framework in generating creative stories, offering valuable insights for future research in this domain. Additionally, we identify potential areas for future work, including the exploration of alternative divergence measures and the investigation of self-distillation for language generation. This research contributes to the growing body of work on LLMs and their applications in creative storytelling, paving the way for more advanced and efficient story generation systems.\footnote{GitHub Repository: \hyperref[github.com/Stry233/MlAndOpt-LLM-for-Creative-Story-Generation]{https://github.com/Stry233/MlAndOpt-LLM-for-Creative-Story-Generation}}
+Creative story generation is a challenging and intriguing task in the field of natural language processing. With the advent of Large Language Models (LLMs), there is growing interest in utilizing their impressive text generation capabilities for generating coherent and engaging stories. In this paper, we investigate the potential of Large Language Models (LLMs) for creative story generation, aiming to develop a framework that generates coherent and engaging stories characterized by rich narrative structures. Our methodology combines LLM fine-tuning with knowledge distillation techniques, utilizing both teacher and student models to create a computationally efficient framework capable of producing captivating stories without compromising text quality. We provide an in-depth overview of our methodology, detailing the implementation of knowledge distillation and its associated loss functions. Our experiments demonstrate the effectiveness of our proposed framework in generating creative stories, offering valuable insights for future research in this domain. Additionally, we identify potential areas for future work, including the exploration of alternative divergence measures and the investigation of self-distillation for language generation. This research contributes to the growing body of work on LLMs and their applications in creative storytelling, paving the way for more advanced and efficient story generation systems.\footnote{GitHub Repository: \hyperref[https://github.com/Stry233/MlAndOpt-LLM-for-Creative-Story-Generation]{https://github.com/Stry233/MlAndOpt-LLM-for-Creative-Story-Generation}}\footnote{Demo link: \hyperref[http://vsg-ek.herokuapp.com/]{http://vsg-ek.herokuapp.com/}}
 \end{abstract}
 
 \section{Introduction}
@@ -134,7 +134,7 @@ To achieve this goal, we have been working on several tasks, including understan
 
 \section{Related Work}
 \subsection{Visual Story Generation}
-Storytelling is an important part of human lives and can be portrayed in numerous means. Stories can be conveyed through just text or they can incorporate visual aspects. Visual storytelling helps to provide more detail and engagement to stories. While large language models have performed exceedingly well on text generation, recent research such as ~\cite{Chen_Li_Shi_Liu_Si_2023} has been utilizing these large language models to co-create visual stories. Visual story generation is often aided by user input or control to provide suggestions for how the visual stories should be developed. Objects and locations are utilized to generate visuals for text-generated sentences. These visualizations use image/object recognition to ensure that visuals accurately depict the text-based story.
+Storytelling is an important part of human lives and can be portrayed in numerous means. Stories can be conveyed through text or they can incorporate visual aspects. Visual storytelling helps to provide more detail and engagement to stories. While large language models have performed exceedingly well on text generation, recent research such as ~\cite{Chen_Li_Shi_Liu_Si_2023} has been utilizing these large language models to co-create visual stories. Visual story generation is often aided by user input or control to provide suggestions for how the visual stories should be developed. Objects and locations are utilized to generate visuals for text-generated sentences. These visualizations use image/object recognition to ensure that visuals accurately depict the text-based story.
 
 \subsection{Text Generation Control}
 While text generation has been extremely powerful and successful in the last decade with recent developments such as GPT-3, many models have lacked the element of control. Recent research such as ~\cite{Yu_Yu_Sagae_2021}, has introduced methods such as attribute alignment, which utilizes an attribute function to guide a pre-trained language model without changing parameters. This method uses emotions and topics as indicators for controlling text generation. Essentially, given a prompt, the next generated sentence will relate to the "attribute" that is assigned, such as a topic (i.e. politics, sports, etc.). This allows the generated text to be fine-tuned to produce specialized results. The field of control over text generation is an emerging area of research as large language models have been deployed for public use.
@@ -392,40 +392,40 @@ For example, for the following input sequence of sentence $\textsc{S}_1$ that se
 \end{center}
 
 %where does 17910 comes from, there is also 1680 in later sections
-\begin{figure}[h]
-    %% first three subfigures
-    \subfigure[Total/Avg]{%
-      \label{fig:Total_scatter}%
-      \includegraphics[width=0.31\textwidth]{figure/[ROC] curEmo-sent.png}%
-    }%
-    \hspace*{\fill}
-    \subfigure[Num/Avg]{
-      \label{fig:Num_scatter}%
-      \includegraphics[width=0.31\textwidth]{figure/[ROC] nextEmo-sent.png}%
-    }%
-    \hspace*{\fill}
-    \subfigure[Raw/Avg]{
-      \label{fig:Raw_scatter}%
-      \includegraphics[width=0.31\textwidth]{images/Raw_scatter}%
-    }
+% \begin{figure}[h]
+%     %% first three subfigures
+%     \subfigure[Total/Avg]{%
+%       \label{fig:Total_scatter}%
+%       \includegraphics[width=0.31\textwidth]{figure/[ROC] curEmo-sent.png}%
+%     }%
+%     \hspace*{\fill}
+%     \subfigure[Num/Avg]{
+%       \label{fig:Num_scatter}%
+%       \includegraphics[width=0.31\textwidth]{figure/[ROC] nextEmo-sent.png}%
+%     }%
+%     \hspace*{\fill}
+%     \subfigure[Raw/Avg]{
+%       \label{fig:Raw_scatter}%
+%       \includegraphics[width=0.31\textwidth]{images/Raw_scatter}%
+%     }
     
-    %% second group of subfigures
-    \subfigure[Num/Raw]{%
-      \label{fig:Num_Raw_scatter}%
-      \includegraphics[width=0.31\textwidth]{images/Num_Raw_scatter}%
-    }%
-    \hspace*{\fill}
-    \subfigure[Total/Raw]{
-      \label{fig:Total_Raw_scatter}%
-      \includegraphics[width=0.31\textwidth]{images/Total_Raw_scatter}%
-    }%
-    \hspace*{\fill}
-    \subfigure[Num/Total]{
-      \label{fig:Num_Total_scatter}%
-      \includegraphics[width=0.31\textwidth]{images/Num_Total_scatter}%
-    }
-    \caption{Scatter plots of 6 pics.}\label{fig:Scatter}
-\end{figure}
+%     %% second group of subfigures
+%     \subfigure[Num/Raw]{%
+%       \label{fig:Num_Raw_scatter}%
+%       \includegraphics[width=0.31\textwidth]{images/Num_Raw_scatter}%
+%     }%
+%     \hspace*{\fill}
+%     \subfigure[Total/Raw]{
+%       \label{fig:Total_Raw_scatter}%
+%       \includegraphics[width=0.31\textwidth]{images/Total_Raw_scatter}%
+%     }%
+%     \hspace*{\fill}
+%     \subfigure[Num/Total]{
+%       \label{fig:Num_Total_scatter}%
+%       \includegraphics[width=0.31\textwidth]{images/Num_Total_scatter}%
+%     }
+%     \caption{Scatter plots of 6 pics.}\label{fig:Scatter}
+% \end{figure}
 
 
 For preparing the training data, we obtained 17,910 pairs of story context and next-sentence emotions from the Story Commonsense dataset. The dataset was divided into training and validation sets in the ratio of 6:4. We then fine-tuned the BERT$_{\textsc{Next Emo}}$ model %from Huggingface
@@ -449,7 +449,7 @@ In this section, we present the experimental results of our creative story gener
 
 In order to obtain the validity of the prompts we added to the input, we used the average of BLEU~\cite{lin-och-2004-orange} scores with n-grams ranging from 1 to 4 and BERT-scores~\cite{https://doi.org/10.48550/arxiv.1904.09675} as basic metrics in our evaluation. In addition, we use METEOR~\cite{banarjee2005} and SacreBLEU\cite{post-2018-call} as supplements to compensate for the lack of stemming and synonym matching, as well as standard exact word matching, when comparing the generated content with the ground truth.
 
-We present the experimental results in Figure~\ref{metricCompare-baseline} and find that, compared to the baseline model, which relies solely on story context for inference, our pipeline shows consistent improvements in all metrics under the same model by introducing emotions and keywords as prompt and knowledge distillation from LLM.
+We present the experimental results in Figure~\ref{metricCompare-baseline} and find that, compared to the baseline model, which relies solely on story context for inference, our pipeline shows consistent improvements in all metrics under the same model by introducing emotions and keywords as prompts and knowledge distillation from LLM.
 
 The experiment results indicate that our creative story generation framework using Large Language Models (LLMs), such as T5, has shown significant improvements compared to the baseline model. By leveraging the knowledge distillation technique, we can reduce the computational overhead while maintaining high-quality text generation. Additionally, the emotion annotation generation and keywords extraction components contribute to the overall improvement of story generation quality. When comparing our framework to the baseline model, which relies solely on story context for inference, our pipeline shows consistent improvements in all metrics, such as BLEU, BERT-score, METEOR, and SacreBLEU. Overall, our experiment results suggest that our research project's methodology, which combines LLM fine-tuning, and knowledge distillation is effective in developing a robust and efficient framework for creative story generation.
 
@@ -534,5 +534,19 @@ In addition to the current implementation, we have identified several areas for 
     \caption{Sample generation results combined with the reseults from image generation pipeline introduced in previous work. By applying DreamBooth with name entity identification and extraction, we align the generation quality of two pipelines in terms of character consistency.}
     \label{fig:plutchikLabel}
 \end{figure}
+
+\begin{figure}[h]
+    \centering
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] curEmo-sent.png}}
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] nextEmo-sent.png}}
+    \vspace{0.2in}
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] curEmo-sent-notitle.png}}
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] curEmo-sent+context.png}}
+    \vspace{0.2in}
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] nextEmo-sent+context.png}}
+    \subfigure{\includegraphics[width=0.48\textwidth]{figure/[ROC] curEmo-sent+context-remSurAni.png}}
+    \caption{All ROC visualization for each emotion label result under different emotion suggester settings}
+\end{figure}
+
 
 \end{document}
