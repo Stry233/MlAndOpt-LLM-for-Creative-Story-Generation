@@ -83,11 +83,69 @@ In contrast to previous work, we propose an interactive visual story generation 
 \section{Methodology}
 In this section, we provide an in-depth overview of the methodology utilized in our research project, which focuses on creative story generation using Large Language Models (LLMs) such as T5. Our approach is built on a foundation of three key components: LLM fine-tuning, knowledge distillation, and parameter-efficient fine-tuning (PEFT). These components work in tandem to create a comprehensive framework that generates engaging stories with rich narrative structures.
 
-\textbf{LLM Fine-tuning:} The first component of our methodology involves fine-tuning pre-trained LLMs on a dataset specifically created for the purpose of creative story generation. This dataset includes a diverse selection of high-quality stories, covering a wide range of themes, genres, and narrative styles. The fine-tuning process enables the LLM to learn the nuances of creative storytelling, including character development, plot progression, and conflict resolution. By adjusting the model's parameters and employing various optimization techniques, we aim to maximize the performance of the fine-tuned model in generating creative stories.
+% \textbf{LLM Fine-tuning:} The first component of our methodology involves fine-tuning pre-trained LLMs on a dataset specifically created for the purpose of creative story generation. This dataset includes a diverse selection of high-quality stories, covering a wide range of themes, genres, and narrative styles. The fine-tuning process enables the LLM to learn the nuances of creative storytelling, including character development, plot progression, and conflict resolution. By adjusting the model's parameters and employing various optimization techniques, we aim to maximize the performance of the fine-tuned model in generating creative stories.
+\subsection{Fine-Tuning Pre-trained Language Models for Content Generation}
+The first component of our methodology involves fine-tuning pre-trained Language Models (LLMs) on a dataset specifically created for the purpose of creative story generation. This dataset includes a diverse selection of high-quality stories, covering a wide range of themes, genres, and narrative styles. The fine-tuning process enables the LLM to learn the nuances of creative storytelling, including character development, plot progression, and conflict resolution. By adjusting the model's parameters and employing various optimization techniques, we aim to maximize the performance of the fine-tuned model in generating creative stories.
 
-\textbf{Knowledge Distillation:} The second component of our approach is knowledge distillation, which is employed to condense the information acquired during the fine-tuning process into a smaller, more manageable model. This process involves training a compact model to mimic the output distribution of the larger, fine-tuned model. As a result, the distilled model retains most of the original model's capabilities while offering the advantages of reduced computational requirements and faster generation times. This streamlined model is better suited for practical deployment in creative story generation tasks.
+\subsection{Knowledge Distillation}
+Knowledge distillation is a technique used to transfer knowledge from a large, pre-trained teacher model to a smaller student model. In this section, we describe in detail the implementation of knowledge distillation for language generation using the provided code snippet. We discuss the equations, objective/loss function, and any necessary derivations.
+Given the dataset $D$, the objective of the fine-tuning process is to adjust the parameters of the pre-trained LLM, $\theta$, to minimize the cross-entropy loss between the model's output probabilities and the true token labels:
 
-\textbf{Parameter-Efficient Fine-Tuning (PEFT):} The third component of our methodology is the incorporation of Parameter-Efficient Fine-Tuning (PEFT). This technique is designed to optimize model performance and computational efficiency by fine-tuning only a subset of the model's parameters that are deemed most relevant to the creative story generation task. By carefully selecting and adjusting these critical parameters, we can achieve improved performance with fewer computational resources. The PEFT process enables us to create a more efficient model for generating creative stories without compromising the quality of the output.
+\begin{equation}
+\mathcal{L}_{FT}(\theta) = - \sum{i=1}^N \sum_{t=1}^{T^{(i)}} \log P_\theta(y_t^{(i)} | x^{(i)})
+\end{equation}
+
+where $T^{(i)}$ is the length of the target sequence $y^{(i)}$, and $P_\theta(y_t^{(i)} | x^{(i)})$ is the probability of the true token $y_t^{(i)}$ at position $t$ given the input sequence $x^{(i)}$ and the model parameters $\theta$. We fine-tune the pre-trained LLM using the collected dataset and the optimization techniques mentioned above. The training process is illustrated in the following pseudocode:
+
+
+
+\subsubsection{Teacher and Student Model Selection}
+We begin by selecting the teacher and student model architectures. The teacher model is a large, pre-trained language model (e.g., opt-1.3b), while the student model is a smaller architecture (e.g., t5-base). We use the Hugging Face transformers library to load the pre-trained models and associated tokenizers.
+\begin{lstlisting}
+teacher_model_name = "opt-1.3b"
+student_model_name = "t5-base"
+tokenizer = AutoTokenizer.from_pretrained (teacher_model_name)
+\end{lstlisting}
+\subsubsection{Tokenization and Batching of Input Data}
+The input text data is tokenized and batched using the teacher model's tokenizer. We use the TextDataset and DataCollatorForLanguageModeling classes from the transformers library to facilitate this process.
+\subsubsection{Generating Soft Labels with the Teacher Model}
+The teacher model is used to generate soft labels for the input text data. Soft labels are probability distributions over the vocabulary for each token in the input sequence. We pass the tokenized input batches through the teacher model and store the logits for each batch.
+\subsubsection{Student Model Training with Soft Labels as Targets}
+The student model is trained using the generated soft labels as targets. We define a custom loss function that computes the distillation loss (Lce), masked language modeling loss (Lmlm), and cosine embedding loss (Lcos). The total loss is a linear combination of these losses.
+\subsubsection{Distillation Loss (Lce)}
+Distillation loss measures the divergence between the teacher and student model's probability distributions for each token in the input sequence. We compute the distillation loss by applying the KL-divergence between the temperature-scaled softmax probabilities of the student and teacher models:
+
+\begin{align}
+L_{ce} = \text{KL} \left( \text{softmax}\left(\frac{\text{logits}_{\text{student}}}{T}\right) \ || \ \text{softmax}\left(\frac{\text{logits}_{\text{teacher}}}{T}\right) \right)
+\end{align}
+where $T$ is the temperature hyperparameter that controls the sharpness of the distributions. In the provided code, we use $T=2.0$.
+
+\subsubsection{Masked Language Modeling Loss (Lmlm)}
+Masked language modeling loss is the standard language modeling loss used in pretraining. It measures the model's ability to predict the next token given the previous tokens in the input sequence. We compute this loss using the cross-entropy between the logits of the student model and the true token IDs:
+
+\begin{align}
+L_{mlm} = \text{CE} \left( \text{logits}_{\text{student}}, \text{input\_ids}_{\text{true}} \right)
+\end{align}
+
+\subsubsection{Cosine Embedding Loss (Lcos)}
+Cosine embedding loss measures the similarity between the hidden states of the teacher and student models. We compute this loss using the cosine similarity between the last hidden states of the teacher and student models:
+
+\begin{align}
+L_{cos} = \text{Cosine\_Loss} \left( \text{hidden\_states}_{\text{student}}, \text{hidden\_states}_{\text{teacher}}, \text{target} \right)
+\end{align}
+
+where the target is a tensor of ones, indicating that the similarity should be maximized.
+
+\subsubsection{Total Loss}
+The total loss is a linear combination of the distillation loss, masked language modeling loss, and cosine embedding loss:
+
+\begin{align}
+L_{total} = \alpha_{ce} L_{ce} + \alpha_{mlm} L_{mlm} + \alpha_{cos} L_{cos}
+\end{align}
+
+where $\alpha_{ce}$, $\alpha_{mlm}$, and $\alpha_{cos}$ are the weights of each loss component. In the provided code, we use $\alpha_{ce} = 0.5$, $\alpha_{mlm} = 0.5$, and $\alpha_{cos} = 0.1$.
+
+% \textbf{Parameter-Efficient Fine-Tuning (PEFT):} The third component of our methodology is the incorporation of Parameter-Efficient Fine-Tuning (PEFT). This technique is designed to optimize model performance and computational efficiency by fine-tuning only a subset of the model's parameters that are deemed most relevant to the creative story generation task. By carefully selecting and adjusting these critical parameters, we can achieve improved performance with fewer computational resources. The PEFT process enables us to create a more efficient model for generating creative stories without compromising the quality of the output.
 
 Together, these three components form the core of our research project's methodology, which aims to harness the power of Large Language Models for creative story generation. By fine-tuning, distilling, and applying parameter-efficient techniques, we strive to develop a robust and efficient framework capable of producing captivating and imaginative stories.
 % \subsection{LLM Finetuning}
